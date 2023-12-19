@@ -1,9 +1,23 @@
 {% extends 'Aweapp/base.html' %}
 {% block content %}
 <div class="alt">Chat Page!</div>
-<form action="/chat/" method="post">
+<!-- <form action="/chat/" method="post" class="form-group">
     {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit", name="save">Submit</button>
-</form>
+    <div class="input-group mb-3">
+        <div class="input-group-append">
+        
+        <button type="submit" name="save" class="btn btn-success">Send</button>
+        </div>
+        {{ form.prompt }}
+    </div>
+</form> -->
+<form action="/chat/" method="post" class="form-inline">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input name="message" type="text" class="form-control" placeholder="Type your message" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button">Submit</button>
+        </div>
+      </div>
+  </form>
 {% endblock %}

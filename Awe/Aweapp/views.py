@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from .models import ToDoList, Item
 from .forms import CreateNewChat
@@ -14,5 +14,12 @@ def v1(response):
 
 def chat(response):
     """Renders the chat page using the Aweapp/chat.html template."""
-    form = CreateNewChat()
+    if response.method == "POST":
+        message = response.POST.get('message', '')
+        return HttpResponse("<h1>" + message + "</h1>")
+    else:   
+        form = CreateNewChat()
     return render(response, "Aweapp/chat.html", {"form":form})
+def about(response):
+    """Renders the about page using the Aweapp/about.html template."""
+    return render(response, "Aweapp/about.html")
