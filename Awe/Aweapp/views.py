@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from .models import ToDoList, Item
 from .forms import CreateNewChat
+from .chatsys import get_response
 def home(response):
     return render(response, "Aweapp/home.html", {"name": "Welcome to Awe!"})
 def index(response, id):
@@ -16,10 +17,11 @@ def chat(response):
     """Renders the chat page using the Aweapp/chat.html template."""
     if response.method == "POST":
         message = response.POST.get('message', '')
-        return HttpResponse("<h1>" + message + "</h1>")
-    else:   
+        out= get_response(message)
+        return HttpResponse("<h1>" + out + "</h1>")
+    else:
         form = CreateNewChat()
-    return render(response, "Aweapp/chat.html", {"form":form})
+    return render(response, "Aweapp/chat.html", {"form": form})#changes in bard
 def about(response):
     """Renders the about page using the Aweapp/about.html template."""
     return render(response, "Aweapp/about.html")
