@@ -1,0 +1,40 @@
+
+<html lang="en">
+<head>
+    <title>Christmas Greetings</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #7dbd07;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        .greeting {
+            font-size: 2em;
+            margin: 20px;
+            padding: 10px;
+            background-color: #d33f49;
+            display: inline-block;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .alt {
+                    font-size: 2em;
+                    margin: 20px;
+                    padding: 10px;
+                    background-color: #4e8ad9; /* Different color for alternative style */
+                    display: inline-block;
+                    border-radius: 15px; /* More rounded corners for the box */
+                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                }
+    </style>
+</head>
+<body>
+    <p></p>
+        {% block content %}
+            <div class="greeting"><h>"AWE"</h>
+        {% endblock %}
+    </div>
+</body>
+</html>

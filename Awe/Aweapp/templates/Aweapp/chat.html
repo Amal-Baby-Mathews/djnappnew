@@ -1,0 +1,9 @@
+{% extends 'Aweapp/base.html' %}
+{% block content %}
+<div class="alt">Chat Page!</div>
+<form action="/chat/" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit", name="save">Submit</button>
+</form>
+{% endblock %}
