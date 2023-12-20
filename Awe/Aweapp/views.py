@@ -13,14 +13,19 @@ def index(response, id):
 def v1(response):
     return HttpResponse("<h1>Hello, world. You're at the Awe v1.</h1>")
 messages = []
+user_input=[]
 def chat(response):
-    messages = []
+    global  message, user_input
     """Renders the chat page using the Aweapp/chat.html template."""
     if response.method == "POST":
         message = response.POST.get('message', '')
+        
         out= get_response(message)
-        messages = [message,out] 
-        return render(response, "Aweapp/chat.html",  {"messages": messages})
+        p=[message,out]
+        if p:
+            user_input.append(p[0])
+            messages.append(p)
+        return render(response, "Aweapp/chat.html",  {"messages": messages, "user_input": user_input})
     else:
         form = CreateNewChat()
         return render(response, "Aweapp/chat.html", { "form": form})
