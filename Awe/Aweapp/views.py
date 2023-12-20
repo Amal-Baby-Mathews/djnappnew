@@ -12,16 +12,18 @@ def index(response, id):
 
 def v1(response):
     return HttpResponse("<h1>Hello, world. You're at the Awe v1.</h1>")
-
+messages = []
 def chat(response):
+    messages = []
     """Renders the chat page using the Aweapp/chat.html template."""
     if response.method == "POST":
         message = response.POST.get('message', '')
         out= get_response(message)
-        return HttpResponse("<h1>" + out + "</h1>")
+        messages = [message,out] 
+        return render(response, "Aweapp/chat.html",  {"messages": messages})
     else:
         form = CreateNewChat()
-    return render(response, "Aweapp/chat.html", {"form": form})#changes in bard
+        return render(response, "Aweapp/chat.html", { "form": form})
 def about(response):
     """Renders the about page using the Aweapp/about.html template."""
     return render(response, "Aweapp/about.html")
