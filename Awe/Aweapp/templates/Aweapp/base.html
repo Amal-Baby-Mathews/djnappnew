@@ -78,16 +78,21 @@
 <body>
     <div class="sidenav">
         <a href="/">Home</a>
-        {% if user.is_not_authenticated %}
-
+        {% if not user.is_authenticated %}
         <a href="/login">Login</a>
-
         <a href="/register">Register</a>
         {% endif %}
+        
+        {% if user.is_authenticated %}
         <a href="/chat">Chat</a>
         <a href="/about">About</a>
-        {% if user.is_authenticated %}
-        <a href="/logout">Logout</a>
+        <a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Logout
+          </a>
+          
+          <form id="logout-form" action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+          </form>
         {% endif %}
     </div id="content", name = "content">
         <div class= "row justify-content-center">
