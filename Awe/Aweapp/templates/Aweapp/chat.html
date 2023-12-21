@@ -1,31 +1,101 @@
 {% extends 'Aweapp/base.html' %}
 {% block content %}
 {% load static %}
-<div class="alt">Chat Page!</div>
-<form action="/chat/" method="post" class="form-inline" name="chat-message" onsubmit="submitForm(event)">
-    {% csrf_token %}
+<div class="chat-container">
+  <div class="card flex-grow-1">
+    <div class="card-header bg-primary text-white">Chat</div>
+  </div>
+  <form class="message-form">
+    {%csrf_token%}
     <div class="input-group mb-3">
-        <input name="message" type="text" class="form-control" placeholder="Type your message" aria-label="Recipient's username" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button">Submit</button>
-        </div>
+      <input type="text" class="form-control message-input" placeholder="Type your message..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary btn-send">Send</button>
       </div>
+    </div>
   </form>
-  {% for message in messages %}
-    <ul id="chat-messages" class="list-group">
-        {% for messag in message %}
-            <li class="list-group-item">
-                {% if messag in user_input %}
-                    <img src="{% static 'images/user.png' %}" alt="user icon" width="30" height="30">
-                {% else %}
-                    <img src="{% static 'images/chatbot.png' %}" alt="bot icon" width="30" height="30">
-                {% endif %}
-                {{ messag }}
-            </li>
+</div>
+
+    <div class="card-body messages-box">
+
+      <ul id="chat-messages" class="list-group">
+        {% for chat in chats %}
+        <li class="list-group-item">
+          <img src="{% static 'images/user.png' %}" alt="user icon" width="30" height="30">
+              <p>You</p>
+              <div>
+              {{message}}
+            </div>
+        </li>
+
+        <li class="list-group-item">
+              <img src="{% static 'images/chatbot.png' %}" alt="bot icon" width="30" height="30">
+              <p>AI Chatbot</p>
+              <div>
+              {{response}}
+            </div>
+        </li>
+
+        
         {% endfor %}
-    </ul>
-  {% endfor %}
 
+      </ul>
 
+    </div>
+    <br><br>
+    <br><br>
+    <br><br>
+  
+
+<script>
+  const messagesList = document.querySelector('#chat-messages');
+  const messageForm = document.querySelector('.message-form');
+  const messageInput = document.querySelector('.message-input');
+
+  messageForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const message = messageInput.value.trim();
+    if (message.length === 0) {
+      return;
+    }
+
+    const messageItem = document.createElement('li');
+    messageItem.classList.add('message', 'sent');
+    messageItem.innerHTML = `
+      <img src="{% static 'images/user.png' %}" alt="user icon" width="30" height="30">
+              <b>You</b>
+              <div>
+              ${message}
+            </div>`;
+    messagesList.appendChild(messageItem);
+
+    messageInput.value = '';
+
+    fetch('', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'message': message
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        const response = data.response;
+        const messageItem = document.createElement('li');
+        messageItem.classList.add('message', 'received');
+        messageItem.innerHTML = `
+        <img src="{% static 'images/chatbot.png' %}" alt="bot icon" width="30" height="30">
+            <b>AI Chatbot</b>
+            <div>
+            ${response}
+          </div>
+        `;
+        messagesList.appendChild(messageItem);
+      });
+  });
+
+</script>
 
 {% endblock %}

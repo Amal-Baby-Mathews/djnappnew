@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse
 # Create your views here.
-from .models import ToDoList, Item
+from django.utils import timezone
+from .models import ToDoList, Item, Chat
 from .forms import CreateNewChat
 from .chatsys import get_response
 def home(response):
@@ -12,23 +13,16 @@ def index(response, id):
 
 def v1(response):
     return HttpResponse("<h1>Hello, world. You're at the Awe v1.</h1>")
-messages = []
-user_input=[]
+
 def chat(response):
-    global  message, user_input
-    """Renders the chat page using the Aweapp/chat.html template."""
-    if response.method == "POST":
-        message = response.POST.get('message', '')
-        
-        out= get_response(message)
-        p=[message,out]
-        if p:
-            user_input.append(p[0])
-            messages.append(p)
-        return render(response, "Aweapp/chat.html",  {"messages": messages, "user_input": user_input})
-    else:
-        form = CreateNewChat()
-        return render(response, "Aweapp/chat.html", { "form": form})
+    if response.method == 'POST':
+        message = response.POST.get('message')
+        reply = get_response(message)
+
+        chat = Chat(message=message, response=reply, created_at=timezone.now)
+        chat.save()
+        return JsonResponse({'message': message, 'response': reply})
+    return render(response, 'Aweapp/chat.html', {})
 def about(response):
     """Renders the about page using the Aweapp/about.html template."""
     return render(response, "Aweapp/about.html")
