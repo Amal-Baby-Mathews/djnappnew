@@ -1,5 +1,12 @@
 {% extends 'Aweapp/base.html' %}
 
 {% block content %}
-<div class="greeting">File upload!</div>
+{% load crispy_forms_tags %}
+<form method="post" enctype="multipart/form-data" class="form-horizontal my-3">
+    {% csrf_token %}
+    <div class="mb-3">{{ form|crispy }}</div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </div>
+</form>
 {% endblock %}
