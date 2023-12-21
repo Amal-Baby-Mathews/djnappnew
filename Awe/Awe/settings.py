@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'Aweapp.apps.AweappConfig',
     'register.apps.RegisterConfig',
-    
+    'fileupload.apps.FileuploadConfig',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +130,5 @@ LOGIN_URL = '/login'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_DIR= BASE_DIR / 'media'
