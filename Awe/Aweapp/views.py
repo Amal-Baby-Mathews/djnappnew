@@ -5,6 +5,9 @@ from django.utils import timezone
 from .models import ToDoList, Item, Chat
 from .forms import CreateNewChat
 from .chatsys import get_response
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def home(response):
     return render(response, "Aweapp/home.html", {"name": "Welcome to Awe!"})
 def index(response, id):

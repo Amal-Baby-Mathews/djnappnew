@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from register import views as v
 from . import   views
 urlpatterns= [
@@ -8,4 +8,5 @@ urlpatterns= [
   path("chat/", views.chat, name="chat"),
   path("about/", views.about, name="about"),
   path("register/", v.register, name="register"),
+  path("", include("django.contrib.auth.urls"))
 ]
