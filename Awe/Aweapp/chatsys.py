@@ -82,3 +82,55 @@ def get_response(input):
     # except KeyError:
         # print("KeyError: 'user_input' not found in form data")
         # return "Error: 'user_input' not found in form data", 400
+import PyPDF2
+import csv
+
+def extract_text_from_file(file_path):
+    """
+    Extracts text data from a file if it is a PDF, CSV, or .txt file.
+
+    Args:
+        file_path (str): The path to the file.
+
+    Returns:
+        str: Extracted text data from the file or an empty string if extraction is not possible.
+    """
+
+    # Check the file extension and process accordingly
+    if file_path.endswith('.pdf'):
+        try:
+            with open(file_path, 'rb') as file:
+                reader = PyPDF2.PdfReader(file)
+                text = ''
+                for page in range(len(reader.pages)):
+                    text += reader.getPage(page).extractText()
+                return text
+        except Exception as e:
+            print(f"Error reading PDF file: {e}")
+            return ''
+
+    elif file_path.endswith('.csv'):
+        try:
+            with open(file_path, newline='', encoding='utf-8') as csvfile:
+                text = ''
+                reader = csv.reader(csvfile)
+                for row in reader:
+                    text += ' '.join(row) + '\n'
+                return text
+        except Exception as e:
+            print(f"Error reading CSV file: {e}")
+            return ''
+
+    elif file_path.endswith('.txt'):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                return file.read()
+        except Exception as e:
+            print(f"Error reading text file: {e}")
+            return ''
+
+    else:
+        print("Unsupported file format. Please upload a file of type: PDF, CSV, or .txt")
+        return ''
+      
+

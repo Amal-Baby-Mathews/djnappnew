@@ -1,11 +1,44 @@
 from django.shortcuts import render
 from .forms import FileForm
+from Aweapp.chatsys import extract_text_from_file
+from .models import FaissIndex
+import uuid
 # Create your views here.
 def fileupload(response):
+    message="please upload a file to be indexed"
     if response.method== 'POST':
         form = FileForm(response.POST, response.FILES)
+
         if form.is_valid():
             form.save()
-            return render(response, 'fileupload/fileupload.html', {'form':form})
-    context={'form':FileForm()}
+            uploaded_file = form.instance
+
+            # Get the file path
+            file_path = uploaded_file.file.path
+
+            # Print a message about the file path
+            print("File saved at:", file_path)
+
+            text=extract_text_from_file(file_path)
+            user=response.user
+            print("text extracted")
+
+            # Generate a unique index_id composed of the user's username and the file name
+            index_id = f"{user.username}_{uploaded_file.name}_{uuid.uuid4()}"
+            index = FaissIndex()
+            index.index_id=index_id
+            print(text)
+            
+            try:
+                index.creates_index(text)
+
+                print("index created")
+                index.save_index()  # Save the Faiss index object
+                print("Index saved successfully.")
+                message = "Index saved successfully."
+            except Exception as e:
+                print(f"Error saving index: {e}")
+                message= "Error saving index."
+            return render(response, 'fileupload/fileupload.html', {'form':form, 'message': message})
+    context={'form':FileForm(), 'message': message}
     return render(response, 'fileupload/fileupload.html', context)
