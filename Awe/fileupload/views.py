@@ -33,8 +33,6 @@ def fileupload(response):
                 index.creates_index(text)
 
                 print("index created")
-                index.save_index()  # Save the Faiss index object
-                print("Index saved successfully.")
                 message = "Index saved successfully."
             except Exception as e:
                 print(f"Error saving index: {e}")
@@ -42,3 +40,13 @@ def fileupload(response):
             return render(response, 'fileupload/fileupload.html', {'form':form, 'message': message})
     context={'form':FileForm(), 'message': message}
     return render(response, 'fileupload/fileupload.html', context)
+
+def display_upindex(response):
+    """
+    This function displays the UpIndex.html page for the current user,
+    passing the context of the index object of FaissIndex.
+    """
+    user = response.user
+    indexes = FaissIndex.objects.filter(user=user)
+    context = {'indexes': indexes}
+    return render(response, 'fileupload/UpIndex.html', context)

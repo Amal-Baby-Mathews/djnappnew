@@ -8,7 +8,7 @@ class File(models.Model):
     name = models.CharField(max_length=100)
     file = models.FileField(upload_to='files/')
 
-class FaissIndex:
+class FaissIndex(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     index_id = models.CharField(max_length=100, unique=True)
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -22,8 +22,7 @@ class FaissIndex:
     texts = [" "]
     index = FAISS.from_texts(texts,embeddings)
     
-    def creates_index(text):
-        global index
+    def creates_index(self,text):
         # Initialize Faiss index and Hugging Face pipeline
 
             
@@ -32,4 +31,4 @@ class FaissIndex:
             chunk_overlap=5,
             )
         documents = text_splitter.split_text(text)
-        index.add_texts(documents)
+        self.index.add_texts(documents)

@@ -1,0 +1,19 @@
+{% extends 'Aweapp/base.html' %}
+
+{% block content %}
+<head>
+    <title>Faiss Indexes</title>
+</head>
+<body class="text-center">
+    <h1>Your Faiss Indexes</h1>
+    <ul id="list-upload" class="list-group">
+        {% for index in indexes %}
+            <li class="list-group-item">
+                ID: {{ index.index_id }}<br>      
+            </li>
+        {% empty %}
+            <li class="list-group-item">No Faiss indexes created yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+{% endblock %}

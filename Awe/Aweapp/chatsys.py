@@ -103,7 +103,7 @@ def extract_text_from_file(file_path):
                 reader = PyPDF2.PdfReader(file)
                 text = ''
                 for page in range(len(reader.pages)):
-                    text += reader.getPage(page).extractText()
+                    text += reader.pages[page].extract_text()
                 return text
         except Exception as e:
             print(f"Error reading PDF file: {e}")
