@@ -8,6 +8,8 @@ def register(response):
         form=RegisterForm(response.POST)
         if form.is_valid():
             form.save()
+            username = form['username']
+            FaissIndex.objects.create(user=username, index_id="shared_index")
         return redirect("/")
     else:
         form= RegisterForm()

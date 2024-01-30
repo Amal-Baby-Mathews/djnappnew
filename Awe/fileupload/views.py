@@ -22,7 +22,8 @@ def fileupload(response):
             text=extract_text_from_file(file_path)
             user=response.user
             print("text extracted")
-
+            #delete file at filepath
+            uploaded_file.delete()
             # Generate a unique index_id composed of the user's username and the file name
             index_id = f"{user.username}_{uploaded_file.name}_{uuid.uuid4()}"
             index = FaissIndex.objects.filter(user=user).order_by('-id').first()

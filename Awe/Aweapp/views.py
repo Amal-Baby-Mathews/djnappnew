@@ -16,7 +16,9 @@ def home(response):
 def chat(response):
     if response.method == 'POST':
         user = response.user
-        index=FaissIndex.objects.filter(user=user).order_by('-id').first()
+        index=FaissIndex.objects.filter(user=user).first()
+        if not index:
+            index = FaissIndex.objects.create(user=user)   #try get
         message = response.POST.get('message')
         reply = get_response(message, index)
         chat = Chat(message=message, response=reply, created_at=timezone.now)

@@ -10,7 +10,7 @@ class File(models.Model):
     file = models.FileField(upload_to='files/')
 
 class FaissIndex(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     index_id = models.CharField(max_length=100, unique=True)
 
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -35,3 +35,5 @@ class FaissIndex(models.Model):
         print("Prompt Inserted:", text)
         documents = text_splitter.split_text(text)
         self.index.add_texts(documents)
+    def delete_index_content(self):
+        self.index.reset()
