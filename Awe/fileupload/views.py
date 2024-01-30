@@ -25,15 +25,17 @@ def fileupload(response):
 
             # Generate a unique index_id composed of the user's username and the file name
             index_id = f"{user.username}_{uploaded_file.name}_{uuid.uuid4()}"
-            index = FaissIndex()
+            index = FaissIndex.objects.filter(user=user).order_by('-id').first()
             index.index_id=index_id
+            index.user=user
             print(text)
             
             try:
-                index.creates_index(text)
+                index.add_to_index(text)
 
                 print("index created")
                 message = "Index saved successfully."
+                index.save()
             except Exception as e:
                 print(f"Error saving index: {e}")
                 message= "Error saving index."

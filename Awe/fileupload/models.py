@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
+
 # Create your models here.
 class File(models.Model):
     name = models.CharField(max_length=100)
@@ -11,6 +12,7 @@ class File(models.Model):
 class FaissIndex(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     index_id = models.CharField(max_length=100, unique=True)
+
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     model_kwargs = {'device': 'cpu'}
     encode_kwargs = {'normalize_embeddings': False}
@@ -19,16 +21,17 @@ class FaissIndex(models.Model):
     model_kwargs=model_kwargs,
     encode_kwargs=encode_kwargs
     )
-    texts = [" "]
-    index = FAISS.from_texts(texts,embeddings)
-    
-    def creates_index(self,text):
-        # Initialize Faiss index and Hugging Face pipeline
+    text=[" "]
+    db= FAISS.from_texts(text,embeddings)
+    index=db
+    def return_index(self):
 
-            
+        return self.index
+    def add_to_index(self,text=""):
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=40,
-            chunk_overlap=5,
-            )
+               chunk_size=100,
+               chunk_overlap=50,
+               )
+        print("Prompt Inserted:", text)
         documents = text_splitter.split_text(text)
         self.index.add_texts(documents)

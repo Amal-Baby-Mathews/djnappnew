@@ -1,5 +1,5 @@
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 import requests
 import os
 import time
@@ -29,19 +29,14 @@ embeddings = HuggingFaceEmbeddings(
 texts = ["FAISS is an important library", "LangChain supports FAISS", "My passion is to swim"]
 db = FAISS.from_texts(texts,embeddings)
 #End embeddings
-def get_response(input):
+def get_response(input, ind):
     # try:
-        global db
+        db=ind.return_index()
         user_input = input
         PROMPT=user_input
         relevant_documents = db.similarity_search_with_relevance_scores(PROMPT)
         answer = []
-        text_splitter = RecursiveCharacterTextSplitter(
-               chunk_size=100,
-               chunk_overlap=50,
-               )
-        documents = text_splitter.split_text(PROMPT)
-        db.add_texts(documents)
+        ind.add_to_index(PROMPT)
         for document, relevance_score in relevant_documents:
             if relevance_score > 0.4:
                 print(relevance_score,document.page_content)

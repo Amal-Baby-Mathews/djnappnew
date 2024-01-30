@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 # Create your views here.
 from django.utils import timezone
-from .models import ToDoList, Item, Chat
-from .forms import CreateNewChat
+from .models import Chat
+from fileupload.models import FaissIndex
 from .chatsys import get_response
 from django.contrib.auth.decorators import login_required
 
@@ -14,9 +15,10 @@ def home(response):
 
 def chat(response):
     if response.method == 'POST':
+        user = response.user
+        index=FaissIndex.objects.filter(user=user).order_by('-id').first()
         message = response.POST.get('message')
-        reply = get_response(message)
-
+        reply = get_response(message, index)
         chat = Chat(message=message, response=reply, created_at=timezone.now)
         chat.save()
         return JsonResponse({'message': message, 'response': reply})
