@@ -12,10 +12,10 @@ import time
 import requests
 
 API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
-headers = {"Authorization": "Bearer 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"}
+headers = {"Authorization": ""}
 qAPI_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
-qheaders = {"Authorization": "Bearer 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"}
-genai.configure(api_key="AIzaSyCXYka-DyBrrsyE-yqwcAcUn5FNEJ8-IqE")
+qheaders = {"Authorization": ""}
+genai.configure(api_key="")
 def image_query(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
 	return response.content
