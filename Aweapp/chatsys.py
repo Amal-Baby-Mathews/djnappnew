@@ -7,9 +7,9 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import requests
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
 API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
-headers = {"Authorization": "Bearer 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"}
+headers = {"Authorization": "Bearer "}
 qAPI_URL = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
-qheaders = {"Authorization": "Bearer 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"}
+qheaders = {"Authorization": "Bearer "}
 def query(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
 	return response.json()
