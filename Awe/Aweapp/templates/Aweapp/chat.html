@@ -31,9 +31,14 @@
         <li class="list-group-item">
               <img src="{% static 'images/chatbot.png' %}" alt="bot icon" width="30" height="30">
               <p>AI Chatbot</p>
-              <div>
-              {{response}}
-            </div>
+
+
+
+  <img src="{% static 'images/generated_image.JPEG' %}" alt="Image reply">
+
+                <div>
+                  {{response}} 
+                </div>                                           
         </li>
 
         
@@ -51,7 +56,6 @@
   const messagesList = document.querySelector('#chat-messages');
   const messageForm = document.querySelector('.message-form');
   const messageInput = document.querySelector('.message-input');
-
   messageForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -83,14 +87,19 @@
       .then(response => response.json())
       .then(data => {
         const response = data.response;
+        const imagepath= data.imagepath
         const messageItem = document.createElement('li');
         messageItem.classList.add('message', 'received');
         messageItem.innerHTML = `
         <img src="{% static 'images/chatbot.png' %}" alt="bot icon" width="30" height="30">
-            <b>AI Chatbot</b>
-            <div>
-            ${response}
-          </div>
+              <b>AI Chatbot</b>
+              
+
+                <img src="{% static 'images/generated_image.JPEG' %}" alt="">
+
+                <div>
+                  ${response}
+                </div>
         `;
         messagesList.appendChild(messageItem);
       });
